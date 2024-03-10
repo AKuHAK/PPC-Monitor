@@ -140,7 +140,10 @@ static int command_reg()
                 case 'd':
                     value = debug_reg_dcr_get(reg_num + counter);
                     break;
+
+                // TODO: not implemented
                 case 'r':
+                    printf("Not implemented\n");
                     value = debug_reg_ppc_get(reg_num + counter);
                     break;
 
@@ -156,7 +159,7 @@ static int command_reg()
                     value = debug_reg_gte_get(reg_num + counter);
                     break;
 
-                // Unknown device DCR 0x16-0x17
+                // Unknown device DCR 0x16-0x17 // TODO
                 case 'u':
                     debug_reg_dcr_set(0x16, reg_num + counter);
                     value = debug_reg_dcr_get(0x17);
@@ -190,7 +193,10 @@ static int command_reg()
                     if (pm_settings.readback)
                         readback = debug_reg_dcr_get(reg_num + counter);
                     break;
+
+                // TODO: not implemented
                 case 'r':
+                    printf("Not implemented\n");
                     debug_reg_ppc_set(reg_num + counter, value);
                     if (pm_settings.readback)
                         readback = debug_reg_ppc_get(reg_num + counter);
@@ -215,7 +221,7 @@ static int command_reg()
                         readback = debug_reg_gte_get(reg_num);
                     break;
 
-                // Unknown device DCR 0x16-0x17
+                // Unknown device DCR 0x16-0x17 // TODO
                 case 'u':
                     debug_reg_dcr_set(0x16, reg_num + counter);
                     debug_reg_dcr_set(0x17, value);
@@ -253,7 +259,7 @@ static int command_reg()
         printf("Invalid action: %c\n", *rw);
         return -1;
     }
-    return 0;
+    return value;
 }
 
 /* Dump commands:
@@ -261,7 +267,7 @@ static int command_reg()
  *
  *  arg1: <address>
  *  arg2: <length>
- *  arg3: [format] (not implemented yet)
+ *  arg3: [format] (not implemented yet) // TODO
  */
 static int command_dump()
 {
@@ -1170,25 +1176,25 @@ static int command_ppc()
         printf("DBDR:   0X%x\n", debug_reg_ppc_sp_get(0x3F3));
 
         /*
-        //Instruction Cache Normal Victim 0 - 3
+        // Instruction Cache Normal Victim 0 - 3
         for (int i = 0x370; i < 0x374; i++) {
             printf("INV%i: 0x%x\n", (i - 0x370), debug_reg_ppc_sp_get(i));
         }
 
-        //Instruction Cache Transient Victim 0 - 3
+        // Instruction Cache Transient Victim 0 - 3
         for (int i = 0x374; i < 0x378; i++) {
             printf("ITV%i: 0x%x\n", (i - 0x374), debug_reg_ppc_sp_get(i));
         }
 
-        //Data Cache Normal Victim 0 - 3
+        // Data Cache Normal Victim 0 - 3
         for (int i = 0x390; i < 0x394; i++) {
             printf("DNV%i: 0x%x\n", (i - 0x390), debug_reg_ppc_sp_get(i));
         }
 
-        //Data Cache Transient Victim 0 - 3
+        // Data Cache Transient Victim 0 - 3
         for (int i = 0x394; i < 0x398; i++) {
             printf("DTV%i: 0x%x\n", (i - 0x394), debug_reg_ppc_sp_get(i));
-        }*/
+        } */
 
 
     } else if (*drw == 'r') {

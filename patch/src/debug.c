@@ -206,9 +206,10 @@ void debug_reg_dcr_set(uint16_t dcr, uint32_t value)
     }
 }
 
+// TODO: not implemented
 uint32_t debug_reg_ppc_get(uint16_t gp)
 {
-    return 0;  // Dummy return value, replace with appropriate value if needed
+    return -1;  // Dummy return value, replace with appropriate value if needed
 }
 
 uint32_t debug_reg_ppc_sp_get(uint16_t sp)
@@ -278,6 +279,7 @@ uint32_t debug_reg_ppc_get_msr()
     return msr;
 }
 
+// TODO: not implemented
 void debug_reg_ppc_set(uint16_t gp, uint32_t value) {}
 
 void debug_reg_ppc_sp_set(uint16_t sp, uint32_t value)
@@ -313,7 +315,7 @@ void debug_lut_add_entry(uint32_t lut_addr, uint32_t addr, uint32_t len, void *f
     }
 }
 
-// TODO:
+// TODO: implement debug_prefix_dispatch
 void debug_prefix_dispatch(uint32_t addr, uint32_t arg2, uint32_t arg3) {}
 
 void debug_patch_dev(uint8_t patch_type, uint32_t addr, uint32_t len, void *load_func, void *store_func)
