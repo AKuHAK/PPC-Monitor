@@ -154,13 +154,13 @@ void __attribute__((section(".text_entry"))) _start(void)
     uint32_t ppc_heap_end = 0xAFFFFC;
     uint32_t ppc_heap_size = ppc_heap_end - ppc_patch_end;
 
-    printf("Patch: Patch size: 0x%x (%i bytes)\n", ppc_patch_size, ppc_patch_size);
+    printf("Patch: Patch size: 0x%x (%u bytes)\n", ppc_patch_size, ppc_patch_size);
     printf("Patch: Initializing heap between: 0x%x - 0x%x\n", ppc_patch_end, ppc_heap_end);
 
     // init heap
-    umm_init_heap(ppc_patch_end, (ppc_heap_end - ppc_patch_end));
+    umm_init_heap((void *)ppc_patch_end, (ppc_heap_end - ppc_patch_end));
 
-    printf("Patch: Heap initialized, size: 0x%x (%i bytes)\n", ppc_heap_size, ppc_heap_size);
+    printf("Patch: Heap initialized, size: 0x%x (%u bytes)\n", ppc_heap_size, ppc_heap_size);
 
     // start PPC-MON
     pm_start();

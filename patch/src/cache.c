@@ -3,7 +3,7 @@
 // each block is 32 bytes
 void inval_D_cache(uint32_t addr, uint32_t len_in_blocks)
 {
-    for (int i = 0; i < len_in_blocks; i++) {
+    for (uint32_t i = 0; i < len_in_blocks; i++) {
         asm volatile(
             "dcbi 0, %[addr];"
             "sync;" ::[addr] "r"(addr));
@@ -13,7 +13,7 @@ void inval_D_cache(uint32_t addr, uint32_t len_in_blocks)
 
 void inval_I_cache(uint32_t addr, uint32_t len_in_blocks)
 {
-    for (int i = 0; i < len_in_blocks; i++) {
+    for (uint32_t i = 0; i < len_in_blocks; i++) {
         asm volatile(
             "icbi 0, %[addr];"
             "isync;" ::[addr] "r"(addr));
@@ -23,7 +23,7 @@ void inval_I_cache(uint32_t addr, uint32_t len_in_blocks)
 
 void inval_DI_cache(uint32_t addr, uint32_t len_in_blocks)
 {
-    for (int i = 0; i < len_in_blocks; i++) {
+    for (uint32_t i = 0; i < len_in_blocks; i++) {
         asm volatile(
             "li 0, 0x0;"
             "dcbi 0, %[addr];"

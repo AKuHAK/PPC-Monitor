@@ -206,7 +206,10 @@ void debug_reg_dcr_set(uint16_t dcr, uint32_t value)
     }
 }
 
-uint32_t debug_reg_ppc_get(uint16_t gp) {}
+uint32_t debug_reg_ppc_get(uint16_t gp)
+{
+    return 0;  // Dummy return value, replace with appropriate value if needed
+}
 
 uint32_t debug_reg_ppc_sp_get(uint16_t sp)
 {
@@ -352,7 +355,7 @@ void debug_reset_handler()
 
 void debug_run_on_reset(void *func)
 {
-    if (reset_func_idx > 0x10) {
+    if (reset_func_idx >= 0x10) {
         printf("Reset func list full\n");
         return;
     }

@@ -42,16 +42,15 @@ int strncmp(const char *str1, const char *str2, int n)
 /* Public domain.  */
 #include <stddef.h>
 
-void *
-memmove(void *dest, const void *src, int len)
+void *memmove(void *dest, const void *src, int len)
 {
-    char *d = dest;
-    const char *s = src;
+    char *d = (char *)dest;
+    const char *s = (const char *)src;
     if (d < s)
         while (len--)
             *d++ = *s++;
     else {
-        char *lasts = s + (len - 1);
+        char *lasts = (char *)s + (len - 1);
         char *lastd = d + (len - 1);
         while (len--)
             *lastd-- = *lasts--;

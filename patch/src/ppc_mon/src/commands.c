@@ -106,6 +106,7 @@ static int command_mem()
         printf("Invalid action: %c\n", *rw);
         return -1;
     }
+    return 0;
 }
 
 /* Reg commands:
@@ -252,6 +253,7 @@ static int command_reg()
         printf("Invalid action: %c\n", *rw);
         return -1;
     }
+    return 0;
 }
 
 /* Dump commands:
@@ -324,6 +326,8 @@ static int command_find()
             printf("Match @ 0x%x\n", (addr + (i * 4)));
         }
     }
+
+    return results;
 }
 
 /* MIPS commands:
@@ -549,11 +553,11 @@ static int command_cop0()
                     break;
 
                 default:
-                    printf("cop0r%i does not exist in hardware\n", reg_num);
+                    printf("cop0r%u does not exist in hardware\n", reg_num);
                     return -1;
             }
 
-            printf("(HW) cop0r%i: 0x%x\n", reg_num, value);
+            printf("(HW) cop0r%u: 0x%x\n", reg_num, value);
             // Software
             // 0xbe0344
 
@@ -561,9 +565,9 @@ static int command_cop0()
         } else if (*hs == 's') {
             if (reg_num < 32) {
                 value = *(uint32_t *)(0xbe0344 + (reg_num * 4));
-                printf("(SW) (0x%x) cop0r%i: 0x%.8x\n", (0xbe0344 + (reg_num * 4)), reg_num, value);
+                printf("(SW) (0x%x) cop0r%u: 0x%.8x\n", (0xbe0344 + (reg_num * 4)), reg_num, value);
             } else {
-                printf("No such register: cop0r%i\n", reg_num);
+                printf("No such register: cop0r%u\n", reg_num);
             }
         }
 
@@ -609,11 +613,11 @@ static int command_cop0()
                     break;
 
                 default:
-                    printf("cop0r%i does not exist in hardware\n", reg_num);
+                    printf("cop0r%u does not exist in hardware\n", reg_num);
                     return -1;
             }
             if (pm_settings.readback)
-                printf("(HW) cop0r%i: 0x%x (RB)\n", reg_num, readback);
+                printf("(HW) cop0r%u: 0x%x (RB)\n", reg_num, readback);
 
             // Software
         } else if (*hs == 's') {
@@ -621,10 +625,10 @@ static int command_cop0()
                 *(uint32_t *)(0xbe0344 + (reg_num * 4)) = value;
                 if (pm_settings.readback) {
                     readback = *(uint32_t *)(0xbe0344 + (reg_num * 4));
-                    printf("(SW) (0x%x) cop0r%i: 0x%.8x (RB)\n", (0xbe0344 + (reg_num * 4)), reg_num, readback);
+                    printf("(SW) (0x%x) cop0r%u: 0x%.8x (RB)\n", (0xbe0344 + (reg_num * 4)), reg_num, readback);
                 }
             } else {
-                printf("No such register: cop0r%i\n", reg_num);
+                printf("No such register: cop0r%u\n", reg_num);
             }
         }
         // Invalid action
@@ -713,7 +717,7 @@ static int command_gte()
                     if (reg_num < 0xFF) {
                         value = debug_reg_gte_get(reg_num);
                     } else {
-                        printf("Invalid GTE reg %i\n", reg_num);
+                        printf("Invalid GTE reg %u\n", reg_num);
                         return -1;
                     }
                 } else {
@@ -723,7 +727,7 @@ static int command_gte()
                 break;
         }
 
-        printf("cop2r%.2i: 0x%.8x\n", reg_num, value);
+        printf("cop2r%.2u: 0x%.8x\n", reg_num, value);
 
         // Write
     } else if (*rw == 'w') {
@@ -764,7 +768,7 @@ static int command_gte()
                         if (pm_settings.readback)
                             readback = debug_reg_gte_get(reg_num);
                     } else {
-                        printf("Invalid GTE reg %i\n", reg_num);
+                        printf("Invalid GTE reg %u\n", reg_num);
                         return -1;
                     }
                 } else {
@@ -774,7 +778,7 @@ static int command_gte()
                 break;
         }
         if (pm_settings.readback)
-            printf("cop2r%.2i: 0x%.8x\n", reg_num, readback);
+            printf("cop2r%.2u: 0x%.8x\n", reg_num, readback);
 
     } else {
         printf("Invalid action: %c\n", *rw);
@@ -795,7 +799,7 @@ static int command_gte()
 static int command_xparam()
 {
     // TEMP:
-    void *xparam_str_ptr = 0xbe0a30;
+    const void *xparam_str_ptr = (void *)0xbe0a30;
 
     char *rw = pm_parser_get_argv_ptr(1);
     uint32_t num = pm_parser_get_argv_dec(2);
@@ -806,14 +810,14 @@ static int command_xparam()
         for (int i = 0; i < 18; i++) {
             printf("%.2i: 0x%.8x (%s)\n", i, *(uint32_t *)(0xbe09e0 + (i * 4)), *(char **)(xparam_str_ptr + (i * 4)));
         }
-
         // Read
     } else if (*rw == 'r') {
         if (num < 18) {
             value = *(uint32_t *)(XPARAM_BASE_ADDR + (num * 4));
-            printf("%.2i: 0x%.8x (%s)\n", num, value, *(char **)(xparam_str_ptr + (num * 4)));
+            printf("%.2u: 0x%.8x (%s)\n", num, value, *(char **)(xparam_str_ptr + (num * 4)));
         } else {
-            printf("XPARAM %i does not exist\n", num);
+            printf("XPARAM %u does not exist\n", num);
+            return -1;
         }
         // Write
     } else if (*rw == 'w') {
@@ -821,14 +825,16 @@ static int command_xparam()
             *(uint32_t *)(XPARAM_BASE_ADDR + (num * 4)) = value;
 
             value = *(uint32_t *)(XPARAM_BASE_ADDR + (num * 4));
-            printf("%.2i: 0x%.8x (%s)\n", num, value, *(char **)(xparam_str_ptr + (num * 4)));
+            printf("%.2u: 0x%.8x (%s)\n", num, value, *(char **)(xparam_str_ptr + (num * 4)));
         } else {
-            printf("XPARAM %i does not exist\n", num);
+            printf("XPARAM %u does not exist\n", num);
+            return -1;
         }
     } else {
         printf("Invalid action: %c\n", *rw);
         return -1;
     }
+    return 0;
 }
 
 /* Emulator commands:
@@ -854,7 +860,7 @@ static int command_emu()
                 tbu = debug_reg_ppc_get_tbu();
                 tbl = debug_reg_ppc_get_tbl();
 
-                printf("(0x%x) MIPS Clock Value:     0x%x (%iHz)\n", 0xbe0294, *(uint32_t *)0xbe0294, *(uint32_t *)0xbe0294);
+                printf("(0x%x) MIPS Clock Value:     0x%x (%uHz)\n", 0xbe0294, *(uint32_t *)0xbe0294, *(uint32_t *)0xbe0294);
                 printf("(0x%x) MIPS Clock factor:    0x%x\n", 0xbe02b0, *(uint32_t *)0xbe02b0);
                 printf("(0x%x) Anticipated Cycles at end:  0x%x\n", 0xbe0298, *(uint32_t *)0xbe0298);
                 printf("(0x%x) Actual Cycles at end:       0x%x\n", 0xbe029c, *(uint32_t *)0xbe029c);
@@ -1105,7 +1111,7 @@ static int command_settings()
                     debug_uart_init(pm_settings.baud);
                     printf("1) Baud set to %i\n", pm_settings.baud);
                 } else {
-                    printf("Baud: %i is outside range 9600 - 115200\n");
+                    printf("Baud: %u is outside range 9600 - 115200\n", value);
                 }
                 break;
 
@@ -1127,12 +1133,15 @@ static int command_settings()
                 break;
 
             default:
+                printf("Invalid action %c\n", *drw);
+                return -1;
                 break;
         }
     } else {
         printf("Invalid action %c\n", *drw);
         return -1;
     }
+    return 0;
 }
 
 /* TODO: PPC core commands:
@@ -1190,6 +1199,7 @@ static int command_ppc()
         printf("Invalid action: %c\n", *drw);
         return -1;
     }
+    return 0;
 }
 
 pm_cmd_t pm_core_cmds[] = {
