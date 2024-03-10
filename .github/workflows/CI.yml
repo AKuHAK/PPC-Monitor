@@ -14,23 +14,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: ps2dev/ps2dev:latest
+    container: ghcr.io/akuhak/ps2homebrew:main
     steps:
-
-      - name: Install dependencies
-        run: |
-          apk add build-base git
-
-      - uses: actions/checkout@v3
-      - run: |
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git fetch --prune --unshallow
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Compile PPC Toolchain
         run: |
-          chmod +x ./buildscripts/toolchain/*.sh
-          ./buildscripts/toolchain/001-binutils.sh
-          ./buildscripts/toolchain/002-gcc-stage1.sh
+          export PATH=$PATH:$PS2DEV/powerpc/bin
 
       - name: Compile build
         run: |
