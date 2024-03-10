@@ -5,7 +5,7 @@ all::
 	$(MAKE) -C patch_loader
 
 clean::
-	$(MAKE) -C patch clean clean
+	$(MAKE) -C patch clean
 	$(MAKE) -C patch_loader clean
 
 rebuild: clean all

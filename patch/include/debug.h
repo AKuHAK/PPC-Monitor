@@ -4,9 +4,9 @@
 #include <stdint.h>
 
 #define DEV_STORE 0x1
-#define DEV_LOAD  0x2
+#define DEV_LOAD 0x2
 
-#define PATCH_PREFIX  0x1
+#define PATCH_PREFIX 0x1
 #define PATCH_POSTFIX 0x2
 #define PATCH_REPLACE 0x3
 
@@ -25,7 +25,7 @@ extern void (*debug_reg_mips_lo_set)(uint32_t value);
 extern void (*debug_reg_mips_pc_set)(uint32_t value);
 extern void (*debug_reg_mips_cc_set)(uint32_t value);
 
-//Access entire GTE register file
+// Access entire GTE register file
 extern uint32_t (*debug_reg_gte_get)(uint32_t reg);
 extern void (*debug_reg_gte_set)(uint32_t reg, uint32_t value);
 
@@ -33,7 +33,7 @@ extern void (*debug_uart_init)(uint32_t baud);
 
 extern const char *mips_reg_names[];
 
-//Access entire MIPS register file
+// Access entire MIPS register file
 uint32_t debug_reg_mips_get(uint32_t reg);
 void debug_reg_mips_set(uint32_t reg, uint32_t value);
 
@@ -48,13 +48,13 @@ void debug_reg_dcr_set(uint16_t dcr, uint32_t value);
 void debug_reg_ppc_set(uint16_t gp, uint32_t value);
 void debug_reg_ppc_sp_set(uint16_t sp, uint32_t value);
 
-//patch_type: PATCH_PREFIX, PATCH_POSTFIX, PATCH_REPLACE
-void debug_patch_dev_load(uint8_t patch_type, uint32_t addr, uint32_t len, void* func_ptr);
-void debug_patch_dev_store(uint8_t patch_type, uint32_t addr, uint32_t len, void* func_ptr);
+// patch_type: PATCH_PREFIX, PATCH_POSTFIX, PATCH_REPLACE
+void debug_patch_dev_load(uint8_t patch_type, uint32_t addr, uint32_t len, void *func_ptr);
+void debug_patch_dev_store(uint8_t patch_type, uint32_t addr, uint32_t len, void *func_ptr);
 
-//place branch after reset to debug_reset_handler()
+// place branch after reset to debug_reset_handler()
 void debug_hook_reset();
 void debug_reset_handler();
-void debug_run_on_reset(void* func);
+void debug_run_on_reset(void *func);
 
 #endif

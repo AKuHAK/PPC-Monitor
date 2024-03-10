@@ -1,3 +1,11 @@
 *.o
 *.bin
 *.elf
+
+binutils-gdb/
+gcc/
+.*
+!.clang-format
+!.editorconfig
+!.gitignore
+!.github

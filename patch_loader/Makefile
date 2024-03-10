@@ -18,10 +18,10 @@ all: $(EE_BIN_PKD)
 	$(MAKE) $(EE_BIN)
 
 clean::
-	rm -f obj/*
-	rm -f embed/*
+	rm -rf obj
+	rm -rf embed
 	rm -f *.map
-	rm -f $(EE_BIN) $(EE_BIN_PKD)
+	rm -f $(EE_BIN) $(EE_BIN_PKD) $(EE_SRC_DIR)patch.c
 
 $(EE_BIN_PKD): $(EE_BIN)
 	ps2-packer $< $@
